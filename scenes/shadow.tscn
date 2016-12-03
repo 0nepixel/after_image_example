@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=1]
+
+[ext_resource path="res://sprites/displacements.png" type="Texture" id=1]
+[ext_resource path="res://sprites/icon.png" type="Texture" id=2]
+[ext_resource path="res://scritps/shadow.gd" type="Script" id=3]
+
+[sub_resource type="CanvasItemShader" id=1]
+
+_code = { "fragment":"\n\nuniform texture PrevFrame;\nuniform texture InkBleedMap;\nfloat  InkBleedMap_ST;\nfloat  MainTex_TexelSize;\nuniform float InkBleedMag;\nuniform vec4 InkFadeMag;\n\nfloat i;\nvec2 offsetOffset = UV+ vec2(TIME * 0.25, cos(TIME)/8)-vec2(0.25) ;\nvec4 bleedOffset = tex(InkBleedMap, offsetOffset )* 2;\n\nvec4 col = tex(TEXTURE, UV+ vec2(bleedOffset.x,bleedOffset.y) * InkBleedMag)+InkFadeMag ;\n\n\nCOLOR.rgb = col.rgb;\n\n\n\n", "fragment_ofs":0, "light":"", "light_ofs":0, "vertex":"", "vertex_ofs":0 }
+
+[sub_resource type="CanvasItemMaterial" id=2]
+
+shader/shader = SubResource( 1 )
+shader/shading_mode = 0
+shader_param/InkBleedMap = ExtResource( 1 )
+shader_param/InkBleedMag = 0.05
+shader_param/InkFadeMag = Plane( 0, 0, 0, 1 )
+
+[node name="shadow" type="Sprite"]
+
+visibility/blend_mode = 1
+material/material = SubResource( 2 )
+z/z = -1
+texture = ExtResource( 2 )
+modulate = Color( 1, 0.515625, 0, 1 )
+script/script = ExtResource( 3 )
+
+
